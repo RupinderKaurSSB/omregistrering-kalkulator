@@ -3,7 +3,7 @@ import {fdatasync} from "node:fs";
 import {Drivstoff} from "./enums/Drivstoff";
 import {Kjoeretoeytype} from "./enums/Kjoeretoeytype";
 
-interface Vehicle {
+interface Kjoeretoey {
     kjennemerke: string;
     kjoeretoeytype: string;
     drivstoff: string;
@@ -12,22 +12,22 @@ interface Vehicle {
     foerstegangsregistreringsdato: string;
 }
 
-export const VehicleTable = () => {
-    const [vehicles, setVehicles] = useState<Vehicle[]>([]);
-    const [editingId, setEditingId] = useState<string | null>(null);
-    const [editForm, setEditForm] = useState<Vehicle | null>(null);
+export const KjoeretoeyTable = () => {
+    const [kjoeretoeyListe, setKjoeretoeyListe] = useState<Kjoeretoey[]>([]);
+    const [redigeringsId, setRedigeringsId] = useState<string | null>(null);
+    const [redigeringsSkjema, setRedigeringsSkjema] = useState<Kjoeretoey | null>(null);
 
     useEffect(() => {
-        fetchVehicles();
+        henteAlleKjoeretoey();
     }, []);
 
-    const fetchVehicles = async () => {
+    const henteAlleKjoeretoey = async () => {
         try {
             const response = await fetch('/api/kjoeretoey/hentAlle');
             const data = await response.json();
-            setVehicles(data);
+            setKjoeretoeyListe(data);
         } catch (error) {
-            console.error('Error fetching vehicles:', error);
+            console.error('Feil under henting av kjøretøy:', error);
         }
     };
 
@@ -36,36 +36,36 @@ export const VehicleTable = () => {
             await fetch(`/api/kjoeretoey/${kjennemerke}/fjern`, {
                 method: 'DELETE',
             });
-            fetchVehicles();
+            henteAlleKjoeretoey();
         } catch (error) {
-            console.error('Error deleting vehicle:', error);
+            console.error('Feil ved sletting av kjøretøy:', error);
         }
     };
 
-    const handleEdit = async (vehicle: Vehicle) => {
-        if (editingId === vehicle.kjennemerke) {
+    const håndtereRedigering = async (kjoeretoey: Kjoeretoey) => {
+        if (redigeringsId === kjoeretoey.kjennemerke) {
             try {
-                await fetch(`/api/kjoeretoey/${vehicle.kjennemerke}/oppdater`, {
+                await fetch(`/api/kjoeretoey/${kjoeretoey.kjennemerke}/oppdater`, {
                     method: 'PUT',
                     headers: {
                         'Content-Type': 'application/json',
                     },
-                    body: JSON.stringify(editForm),
+                    body: JSON.stringify(redigeringsSkjema),
                 });
-                setEditingId(null);
-                setEditForm(null);
-                fetchVehicles();
+                setRedigeringsId(null);
+                setRedigeringsSkjema(null);
+                henteAlleKjoeretoey();
             } catch (error) {
-                console.error('Error updating vehicle:', error);
+                console.error('Feil under oppdatering av kjøretøy:', error);
             }
         } else {
-            setEditingId(vehicle.kjennemerke);
-            setEditForm(vehicle);
+            setRedigeringsId(kjoeretoey.kjennemerke);
+            setRedigeringsSkjema(kjoeretoey);
         }
     };
 
     // Add newVehicle state
-    const [newVehicle, setNewVehicle] = useState<Vehicle>({
+    const [nyttKjøretøy, setNyttKjøretøy] = useState<Kjoeretoey>({
         kjennemerke: '',
         kjoeretoeytype: Kjoeretoeytype.PERSONBIL,
         egenvekt: '',
@@ -77,14 +77,14 @@ export const VehicleTable = () => {
     // Add handleCreate function
     const handleCreate = async () => {
         try {
-            await fetch(`/api/kjoeretoey/${newVehicle.kjennemerke}/opprett`, {
+            await fetch(`/api/kjoeretoey/${nyttKjøretøy.kjennemerke}/opprett`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify(newVehicle),
+                body: JSON.stringify(nyttKjøretøy),
             });
-            setNewVehicle({
+            setNyttKjøretøy({
                 kjennemerke: '',
                 kjoeretoeytype: Kjoeretoeytype.PERSONBIL,
                 egenvekt: '',
@@ -92,7 +92,7 @@ export const VehicleTable = () => {
                 drivstoff: Drivstoff.BENSIN,
                 foerstegangsregistreringsdato: ''
             });
-            fetchVehicles();
+            henteAlleKjoeretoey();
         } catch (error) {
             console.error('Error creating vehicle:', error);
         }
@@ -113,15 +113,15 @@ export const VehicleTable = () => {
             </tr>
             </thead>
             <tbody>
-            {vehicles.map((vehicle) => (
-                <tr key={vehicle.kjennemerke}>
-                    <td>{vehicle.kjennemerke}</td>
+            {kjoeretoeyListe.map((kjoeretoey) => (
+                <tr key={kjoeretoey.kjennemerke}>
+                    <td>{kjoeretoey.kjennemerke}</td>
                     <td>
-                        {editingId === vehicle.kjennemerke ? (
+                        {redigeringsId === kjoeretoey.kjennemerke ? (
                             <select
-                                value={editForm?.kjoeretoeytype}
+                                value={redigeringsSkjema?.kjoeretoeytype}
                                 onChange={(e) =>
-                                    setEditForm({...editForm!, kjoeretoeytype: e.target.value})
+                                    setRedigeringsSkjema({...redigeringsSkjema!, kjoeretoeytype: e.target.value})
                                 }
                             >
                                 {Object.values(Kjoeretoeytype).map((type) => (
@@ -131,39 +131,39 @@ export const VehicleTable = () => {
                                 ))}
                             </select>
                         ) : (
-                            vehicle.kjoeretoeytype
+                            kjoeretoey.kjoeretoeytype
                         )}
                     </td>
                     <td>
-                        {editingId === vehicle.kjennemerke ? (
+                        {redigeringsId === kjoeretoey.kjennemerke ? (
                             <input
-                                value={editForm?.egenvekt}
+                                value={redigeringsSkjema?.egenvekt}
                                 onChange={(e) =>
-                                    setEditForm({...editForm!, egenvekt: e.target.value})
+                                    setRedigeringsSkjema({...redigeringsSkjema!, egenvekt: e.target.value})
                                 }
                             />
                         ) : (
-                            vehicle.egenvekt
+                            kjoeretoey.egenvekt
                         )}
                     </td>
                     <td>
-                        {editingId === vehicle.kjennemerke ? (
+                        {redigeringsId === kjoeretoey.kjennemerke ? (
                             <input
-                                value={editForm?.totalvekt}
+                                value={redigeringsSkjema?.totalvekt}
                                 onChange={(e) =>
-                                    setEditForm({...editForm!, totalvekt: e.target.value})
+                                    setRedigeringsSkjema({...redigeringsSkjema!, totalvekt: e.target.value})
                                 }
                             />
                         ) : (
-                            vehicle.totalvekt
+                            kjoeretoey.totalvekt
                         )}
                     </td>
                     <td>
-                        {editingId === vehicle.kjennemerke ? (
+                        {redigeringsId === kjoeretoey.kjennemerke ? (
                             <select
-                                value={editForm?.drivstoff}
+                                value={redigeringsSkjema?.drivstoff}
                                 onChange={(e) =>
-                                    setEditForm({...editForm!, drivstoff: e.target.value})
+                                    setRedigeringsSkjema({...redigeringsSkjema!, drivstoff: e.target.value})
                                 }
                             >
                                 {Object.values(Drivstoff).map((fuel) => (
@@ -173,31 +173,31 @@ export const VehicleTable = () => {
                                 ))}
                             </select>
                         ) : (
-                            vehicle.drivstoff
+                            kjoeretoey.drivstoff
                         )}
                     </td>
 
                     <td>
-                        {editingId === vehicle.kjennemerke ? (
+                        {redigeringsId === kjoeretoey.kjennemerke ? (
                             <input
                                 type="date"
-                                value={editForm?.foerstegangsregistreringsdato}
+                                value={redigeringsSkjema?.foerstegangsregistreringsdato}
                                 onChange={(e) =>
-                                    setEditForm({
-                                        ...editForm!,
+                                    setRedigeringsSkjema({
+                                        ...redigeringsSkjema!,
                                         foerstegangsregistreringsdato: e.target.value,
                                     })
                                 }
                             />
                         ) : (
-                            vehicle.foerstegangsregistreringsdato
+                            kjoeretoey.foerstegangsregistreringsdato
                         )}
                     </td>
                     <td>
-                        <button onClick={() => handleEdit(vehicle)}>
-                            {editingId === vehicle.kjennemerke ? 'Save' : 'Edit'}
+                        <button onClick={() => håndtereRedigering(kjoeretoey)}>
+                            {redigeringsId === kjoeretoey.kjennemerke ? 'Save' : 'Edit'}
                         </button>
-                        <button onClick={() => handleDelete(vehicle.kjennemerke)}>
+                        <button onClick={() => handleDelete(kjoeretoey.kjennemerke)}>
                             Delete
                         </button>
                     </td>
@@ -206,15 +206,15 @@ export const VehicleTable = () => {
             <tr>
                 <td>
                     <input
-                        value={newVehicle.kjennemerke}
-                        onChange={(e) => setNewVehicle({...newVehicle, kjennemerke: e.target.value})}
+                        value={nyttKjøretøy.kjennemerke}
+                        onChange={(e) => setNyttKjøretøy({...nyttKjøretøy, kjennemerke: e.target.value})}
                         placeholder="Kjennemerke"
                     />
                 </td>
                 <td>
                     <select
-                        value={newVehicle.kjoeretoeytype}
-                        onChange={(e) => setNewVehicle({...newVehicle, kjoeretoeytype: e.target.value})}
+                        value={nyttKjøretøy.kjoeretoeytype}
+                        onChange={(e) => setNyttKjøretøy({...nyttKjøretøy, kjoeretoeytype: e.target.value})}
                     >
                         {Object.values(Kjoeretoeytype).map((type) => (
                             <option key={type} value={type}>{type}</option>
@@ -223,8 +223,8 @@ export const VehicleTable = () => {
                 </td>
                 <td>
                     <select
-                        value={newVehicle.drivstoff}
-                        onChange={(e) => setNewVehicle({...newVehicle, drivstoff: e.target.value})}
+                        value={nyttKjøretøy.drivstoff}
+                        onChange={(e) => setNyttKjøretøy({...nyttKjøretøy, drivstoff: e.target.value})}
                     >
                         {Object.values(Drivstoff).map((fuel) => (
                             <option key={fuel} value={fuel}>{fuel}</option>
@@ -233,23 +233,23 @@ export const VehicleTable = () => {
                 </td>
                 <td>
                     <input
-                        value={newVehicle.egenvekt}
-                        onChange={(e) => setNewVehicle({...newVehicle, egenvekt: e.target.value})}
+                        value={nyttKjøretøy.egenvekt}
+                        onChange={(e) => setNyttKjøretøy({...nyttKjøretøy, egenvekt: e.target.value})}
                         placeholder="Egenvekt"
                     />
                 </td>
                 <td>
                     <input
-                        value={newVehicle.totalvekt}
-                        onChange={(e) => setNewVehicle({...newVehicle, totalvekt: e.target.value})}
+                        value={nyttKjøretøy.totalvekt}
+                        onChange={(e) => setNyttKjøretøy({...nyttKjøretøy, totalvekt: e.target.value})}
                         placeholder="Totalvekt"
                     />
                 </td>
                 <td>
                     <input
                         type="date"
-                        value={newVehicle.foerstegangsregistreringsdato}
-                        onChange={(e) => setNewVehicle({...newVehicle, foerstegangsregistreringsdato: e.target.value})}
+                        value={nyttKjøretøy.foerstegangsregistreringsdato}
+                        onChange={(e) => setNyttKjøretøy({...nyttKjøretøy, foerstegangsregistreringsdato: e.target.value})}
                     />
                 </td>
 
