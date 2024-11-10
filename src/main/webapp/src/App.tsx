@@ -1,6 +1,7 @@
 import React from 'react';
 import logo from './skatteetaten-logo.svg';
 import './App.css';
+import {VehicleTable} from "./VehicleTable";
 
 function App() {
   return (
@@ -13,7 +14,7 @@ function App() {
         </div>
       </header>
       <main>
-        {/* TODO */}
+          <VehicleTable />
       </main>
       <footer>Skatteetaten 2023</footer>
     </div>

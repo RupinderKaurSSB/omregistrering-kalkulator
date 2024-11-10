@@ -27,7 +27,7 @@ Det kan gis fritak for betaling av omregistreringsavgiften for kjøretøy som ha
 
 ### Omregistreringsavgift 2022
 
-| Kjøretøytype | Egenvekt         | Drivstoff      | Førstegangsregistreringsår | Registreringsår | Registreringsår |
+| Kjøretøytype | Egenvekt         | Kjoeretoey_enums      | Førstegangsregistreringsår | Registreringsår | Registreringsår |
 |--------------|------------------|----------------|----------------------------|-----------------|-----------------|
 |              |                  |                | 2019 og nyere              | 2011 - 2018     | 2010 og eldre   |
 | Personbiler  |                  |                |                            |                 |                 |

@@ -2,8 +2,10 @@
   "name": "omregistrering-kalkulator-frontend",
   "version": "0.1.1",
   "private": true,
+  "proxy": "http://localhost:8080",
   "dependencies": {
     "@fluentui/react": "^8.102.0",
+    "@skatteetaten/frontend-components": "^14.0.1",
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
