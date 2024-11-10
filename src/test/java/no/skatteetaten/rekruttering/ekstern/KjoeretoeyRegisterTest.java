@@ -28,7 +28,7 @@ public class KjoeretoeyRegisterTest {
         var kjoeretoeyList = KjoeretoeyRegister.hentAlleKjoeretoey();
 
         assertNotNull(kjoeretoeyList);
-        assertEquals(5, kjoeretoeyList.size());
+        assertEquals(6, kjoeretoeyList.size());
 
         assertTrue(kjoeretoeyList.stream()
                 .anyMatch(k -> k.getKjennemerke().equals("PR12345")));

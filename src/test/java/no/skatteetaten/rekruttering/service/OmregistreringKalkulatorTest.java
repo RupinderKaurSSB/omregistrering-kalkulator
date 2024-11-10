@@ -1,5 +1,6 @@
 package no.skatteetaten.rekruttering.service;
 
+import no.skatteetaten.rekruttering.ekstern.KjoeretoeyRegister;
 import no.skatteetaten.rekruttering.ekstern.model.Drivstoff;
 import no.skatteetaten.rekruttering.ekstern.model.Kjoeretoey;
 import no.skatteetaten.rekruttering.ekstern.model.Kjoeretoeytype;
@@ -13,10 +14,13 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 class OmregistreringKalkulatorTest {
 
     private OmregistreringKalkulator kalkulator;
+    private KjoeretoeyRegister kjoeretoeyRegister;
+
+    private Kjoeretoey kjoeretoey;
 
     @BeforeEach
     void setUp() {
-        kalkulator = new OmregistreringKalkulator();
+        kalkulator = new OmregistreringKalkulator(kjoeretoeyRegister, kjoeretoey);
     }
 
     @Test
@@ -199,5 +203,10 @@ class OmregistreringKalkulatorTest {
         );
 
         assertEquals(1154, kalkulator.beregnOmregistreringsavgift(varebil));
+    }
+
+    @Test
+    void kjoeretoey_PR12345_shouldHaveCorrectFee() {
+        assertEquals(6681, kalkulator.beregnOmregistreringsAvgift("PR12345"));
     }
 }

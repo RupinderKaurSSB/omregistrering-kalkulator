@@ -1,14 +1,28 @@
 package no.skatteetaten.rekruttering.service;
 
+import no.skatteetaten.rekruttering.ekstern.KjoeretoeyRegister;
 import no.skatteetaten.rekruttering.ekstern.model.Drivstoff;
 import no.skatteetaten.rekruttering.ekstern.model.Kjoeretoey;
 import no.skatteetaten.rekruttering.ekstern.model.Kjoeretoeytype;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.time.Period;
 import java.time.temporal.ChronoUnit;
 
+@Service
 public class OmregistreringKalkulator {
-    // TODO: Lag en metode som beregner riktig omregistreringsavgift gitt kjøretøydata (tekniske spesifikasjoner)
+    @Autowired
+    private final KjoeretoeyRegister kjoeretoeyRegister;
+
+    private final Kjoeretoey kjoeretoey;
+
+    @Autowired
+    public OmregistreringKalkulator(KjoeretoeyRegister kjoeretoeyRegister, Kjoeretoey kjoeretoey) {
+        this.kjoeretoeyRegister = kjoeretoeyRegister;
+        this.kjoeretoey = kjoeretoey;
+    }
 
     public int beregnOmregistreringsavgift(Kjoeretoey kjoeretoey) {
         LocalDate now = LocalDate.now();
@@ -49,9 +63,13 @@ public class OmregistreringKalkulator {
         }
     }
 
-    // TODO: Lag en metode som beregner riktig omregistreringsavgift gitt kjennemerke (Se klassen KjoeretoeyRegister
-    //  .java)
+    public double beregnOmregistreringsAvgift(String kjennemerke) {
+        Kjoeretoey kjoeretoey = kjoeretoeyRegister.hentKjoeretoey(kjennemerke);
 
-    // TODO: Utvid metoden for beregning av omregistreringsavgift til å hensynta fritak fra omregistreringsavgiften
-    //  gitt at kjøretøyet ble førstegangsregistrert for mer enn 30 år siden (veterankjøretøy)
+        if (kjoeretoey == null) {
+            throw new IllegalArgumentException("Kjennemerke finnes ikke");
+        }
+
+        return beregnOmregistreringsavgift(kjoeretoey);
+    }
 }

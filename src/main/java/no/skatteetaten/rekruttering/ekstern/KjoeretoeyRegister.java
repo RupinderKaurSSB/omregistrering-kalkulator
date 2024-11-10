@@ -9,7 +9,9 @@ import java.util.Map;
 import no.skatteetaten.rekruttering.ekstern.model.Drivstoff;
 import no.skatteetaten.rekruttering.ekstern.model.Kjoeretoey;
 import no.skatteetaten.rekruttering.ekstern.model.Kjoeretoeytype;
+import org.springframework.stereotype.Component;
 
+@Component
 public class KjoeretoeyRegister {
 
     /**

@@ -2,6 +2,7 @@ import React from 'react';
 import logo from './skatteetaten-logo.svg';
 import './App.css';
 import {VehicleTable} from "./VehicleTable";
+import {CalculateFee} from "./CalculateFee";
 
 function App() {
   return (
@@ -15,6 +16,7 @@ function App() {
       </header>
       <main>
           <VehicleTable />
+          <CalculateFee />
       </main>
       <footer>Skatteetaten 2023</footer>
     </div>
