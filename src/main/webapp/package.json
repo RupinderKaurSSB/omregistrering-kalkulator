@@ -2,6 +2,7 @@
   "name": "omregistrering-kalkulator-frontend",
   "version": "0.1.1",
   "private": true,
+  "proxy": "http://localhost:8080",
   "dependencies": {
     "@fluentui/react": "^8.102.0",
     "@fluentui/react-components": "^9.56.0",

@@ -9,8 +9,7 @@ import {
     TableHeader,
     TableHeaderCell,
     TableCellLayout,
-    PresenceBadgeStatus,
-    Avatar,
+    Avatar, Button,
 } from "@fluentui/react-components";
 
 interface Kjoeretoey {
@@ -75,7 +74,7 @@ export const KjoeretoeyTable = () => {
     };
 
     // Add newVehicle state
-    const [nyttKjøretøy, setNyttKjøretøy] = useState<Kjoeretoey>({
+    const [nyttKjoeretoey, setNyttKjoeretoey] = useState<Kjoeretoey>({
         kjennemerke: '',
         kjoeretoeytype: Kjoeretoeytype.PERSONBIL,
         egenvekt: '',
@@ -87,14 +86,14 @@ export const KjoeretoeyTable = () => {
     // Add handleCreate function
     const handleOppretteKjoeretoey = async () => {
         try {
-            await fetch(`/api/kjoeretoey/${nyttKjøretøy.kjennemerke}/opprett`, {
+            await fetch(`/api/kjoeretoey/${nyttKjoeretoey.kjennemerke}/opprett`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify(nyttKjøretøy),
+                body: JSON.stringify(nyttKjoeretoey),
             });
-            setNyttKjøretøy({
+            setNyttKjoeretoey({
                 kjennemerke: '',
                 kjoeretoeytype: Kjoeretoeytype.PERSONBIL,
                 egenvekt: '',
@@ -107,167 +106,205 @@ export const KjoeretoeyTable = () => {
             console.error('Error creating vehicle:', error);
         }
     };
-
-
     return (
-        <table>
-            <thead>
-            <tr>
-                <th>Kjennemerke</th>
-                <th>Kjoeretoeytype</th>
-                <th>Egen vekt</th>
-                <th>Total Vekt</th>
-                <th>Drivstoff</th>
-                <th>Førstegangsregistreringsdato</th>
-                <th>Actions</th>
-            </tr>
-            </thead>
-            <tbody>
-            {kjoeretoeyListe.map((kjoeretoey) => (
-                <tr key={kjoeretoey.kjennemerke}>
-                    <td>{kjoeretoey.kjennemerke}</td>
-                    <td>
-                        {redigeringsId === kjoeretoey.kjennemerke ? (
+        <Table>
+            <TableHeader>
+                <TableRow>
+                    <TableHeaderCell>Kjennemerke</TableHeaderCell>
+                    <TableHeaderCell>Kjøretøytype</TableHeaderCell>
+                    <TableHeaderCell>Egen vekt</TableHeaderCell>
+                    <TableHeaderCell>Total Vekt</TableHeaderCell>
+                    <TableHeaderCell>Drivstoff</TableHeaderCell>
+                    <TableHeaderCell>Førstegangsregistreringsdato</TableHeaderCell>
+                    <TableHeaderCell>Actions</TableHeaderCell>
+                </TableRow>
+            </TableHeader>
+            <TableBody>
+                {kjoeretoeyListe.map((kjoeretoey) => (
+                    <TableRow key={kjoeretoey.kjennemerke}>
+                        <TableCell>
+                            <TableCellLayout>
+                                {kjoeretoey.kjennemerke}
+                            </TableCellLayout>
+                        </TableCell>
+                        <TableCell>
+                            <TableCellLayout>
+                                {redigeringsId === kjoeretoey.kjennemerke ? (
+                                    <select
+                                        value={redigeringsSkjema?.kjoeretoeytype}
+                                        onChange={(e) =>
+                                            setRedigeringsSkjema({...redigeringsSkjema!, kjoeretoeytype: e.target.value})
+                                        }
+                                    >
+                                        {Object.values(Kjoeretoeytype).map((type) => (
+                                            <option key={type} value={type}>
+                                                {type}
+                                            </option>
+                                        ))}
+                                    </select>
+                                ) : (
+                                    kjoeretoey.kjoeretoeytype
+                                )}
+                            </TableCellLayout>
+                        </TableCell>
+                        <TableCell>
+                            <TableCellLayout>
+                                {redigeringsId === kjoeretoey.kjennemerke ? (
+                                    <input
+                                        value={redigeringsSkjema?.egenvekt}
+                                        onChange={(e) =>
+                                            setRedigeringsSkjema({...redigeringsSkjema!, egenvekt: e.target.value})
+                                        }
+                                    />
+                                ) : (
+                                    kjoeretoey.egenvekt
+                                )}
+                            </TableCellLayout>
+                        </TableCell>
+                        <TableCell>
+                            <TableCellLayout>
+                                {redigeringsId === kjoeretoey.kjennemerke ? (
+                                    <input
+                                        value={redigeringsSkjema?.totalvekt}
+                                        onChange={(e) =>
+                                            setRedigeringsSkjema({...redigeringsSkjema!, totalvekt: e.target.value})
+                                        }
+                                    />
+                                ) : (
+                                    kjoeretoey.totalvekt
+                                )}
+                            </TableCellLayout>
+                        </TableCell>
+                        <TableCell>
+                            <TableCellLayout>
+                                {redigeringsId === kjoeretoey.kjennemerke ? (
+                                    <select
+                                        value={redigeringsSkjema?.drivstoff}
+                                        onChange={(e) =>
+                                            setRedigeringsSkjema({...redigeringsSkjema!, drivstoff: e.target.value})
+                                        }
+                                    >
+                                        {Object.values(Drivstoff).map((fuel) => (
+                                            <option key={fuel} value={fuel}>
+                                                {fuel}
+                                            </option>
+                                        ))}
+                                    </select>
+                                ) : (
+                                    kjoeretoey.drivstoff
+                                )}
+                            </TableCellLayout>
+                        </TableCell>
+                        <TableCell>
+                            <TableCellLayout>
+                                {redigeringsId === kjoeretoey.kjennemerke ? (
+                                    <input
+                                        type="date"
+                                        value={redigeringsSkjema?.foerstegangsregistreringsdato}
+                                        onChange={(e) =>
+                                            setRedigeringsSkjema({
+                                                ...redigeringsSkjema!,
+                                                foerstegangsregistreringsdato: e.target.value,
+                                            })
+                                        }
+                                    />
+                                ) : (
+                                    kjoeretoey.foerstegangsregistreringsdato
+                                )}
+                            </TableCellLayout>
+                        </TableCell>
+                        <TableCell>
+                            <TableCellLayout>
+                                <Button
+                                    onClick={() => redigereKjoeretoey(kjoeretoey)}
+                                    appearance="primary"
+                                >
+                                    {redigeringsId === kjoeretoey.kjennemerke ? 'Save' : 'Edit'}
+                                </Button>
+                                <Button
+                                    onClick={() => sletteKjoeretoey(kjoeretoey.kjennemerke)}
+                                    appearance="secondary"
+                                >
+                                    Slette
+                                </Button>
+                            </TableCellLayout>
+                        </TableCell>
+                    </TableRow>
+                ))}
+                <TableRow>
+                    <TableCell>
+                        <TableCellLayout>
+                            <input
+                                value={nyttKjoeretoey.kjennemerke}
+                                onChange={(e) => setNyttKjoeretoey({...nyttKjoeretoey, kjennemerke: e.target.value})}
+                                placeholder="Kjennemerke"
+                            />
+                        </TableCellLayout>
+                    </TableCell>
+                    <TableCell>
+                        <TableCellLayout>
                             <select
-                                value={redigeringsSkjema?.kjoeretoeytype}
-                                onChange={(e) =>
-                                    setRedigeringsSkjema({...redigeringsSkjema!, kjoeretoeytype: e.target.value})
-                                }
+                                value={nyttKjoeretoey.kjoeretoeytype}
+                                onChange={(e) => setNyttKjoeretoey({...nyttKjoeretoey, kjoeretoeytype: e.target.value})}
                             >
                                 {Object.values(Kjoeretoeytype).map((type) => (
-                                    <option key={type} value={type}>
-                                        {type}
-                                    </option>
+                                    <option key={type} value={type}>{type}</option>
                                 ))}
                             </select>
-                        ) : (
-                            kjoeretoey.kjoeretoeytype
-                        )}
-                    </td>
-                    <td>
-                        {redigeringsId === kjoeretoey.kjennemerke ? (
-                            <input
-                                value={redigeringsSkjema?.egenvekt}
-                                onChange={(e) =>
-                                    setRedigeringsSkjema({...redigeringsSkjema!, egenvekt: e.target.value})
-                                }
-                            />
-                        ) : (
-                            kjoeretoey.egenvekt
-                        )}
-                    </td>
-                    <td>
-                        {redigeringsId === kjoeretoey.kjennemerke ? (
-                            <input
-                                value={redigeringsSkjema?.totalvekt}
-                                onChange={(e) =>
-                                    setRedigeringsSkjema({...redigeringsSkjema!, totalvekt: e.target.value})
-                                }
-                            />
-                        ) : (
-                            kjoeretoey.totalvekt
-                        )}
-                    </td>
-                    <td>
-                        {redigeringsId === kjoeretoey.kjennemerke ? (
+                        </TableCellLayout>
+                    </TableCell>
+                    <TableCell>
+                        <TableCellLayout>
                             <select
-                                value={redigeringsSkjema?.drivstoff}
-                                onChange={(e) =>
-                                    setRedigeringsSkjema({...redigeringsSkjema!, drivstoff: e.target.value})
-                                }
+                                value={nyttKjoeretoey.drivstoff}
+                                onChange={(e) => setNyttKjoeretoey({...nyttKjoeretoey, drivstoff: e.target.value})}
                             >
                                 {Object.values(Drivstoff).map((fuel) => (
-                                    <option key={fuel} value={fuel}>
-                                        {fuel}
-                                    </option>
+                                    <option key={fuel} value={fuel}>{fuel}</option>
                                 ))}
                             </select>
-                        ) : (
-                            kjoeretoey.drivstoff
-                        )}
-                    </td>
-
-                    <td>
-                        {redigeringsId === kjoeretoey.kjennemerke ? (
+                        </TableCellLayout>
+                    </TableCell>
+                    <TableCell>
+                        <TableCellLayout>
+                            <input
+                                value={nyttKjoeretoey.egenvekt}
+                                onChange={(e) => setNyttKjoeretoey({...nyttKjoeretoey, egenvekt: e.target.value})}
+                                placeholder="Egenvekt"
+                            />
+                        </TableCellLayout>
+                    </TableCell>
+                    <TableCell>
+                        <TableCellLayout>
+                            <input
+                                value={nyttKjoeretoey.totalvekt}
+                                onChange={(e) => setNyttKjoeretoey({...nyttKjoeretoey, totalvekt: e.target.value})}
+                                placeholder="Totalvekt"
+                            />
+                        </TableCellLayout>
+                    </TableCell>
+                    <TableCell>
+                        <TableCellLayout>
                             <input
                                 type="date"
-                                value={redigeringsSkjema?.foerstegangsregistreringsdato}
-                                onChange={(e) =>
-                                    setRedigeringsSkjema({
-                                        ...redigeringsSkjema!,
-                                        foerstegangsregistreringsdato: e.target.value,
-                                    })
-                                }
+                                value={nyttKjoeretoey.foerstegangsregistreringsdato}
+                                onChange={(e) => setNyttKjoeretoey({
+                                    ...nyttKjoeretoey,
+                                    foerstegangsregistreringsdato: e.target.value
+                                })}
                             />
-                        ) : (
-                            kjoeretoey.foerstegangsregistreringsdato
-                        )}
-                    </td>
-                    <td>
-                        <button onClick={() => redigereKjoeretoey(kjoeretoey)}>
-                            {redigeringsId === kjoeretoey.kjennemerke ? 'Save' : 'Edit'}
-                        </button>
-                        <button onClick={() => sletteKjoeretoey(kjoeretoey.kjennemerke)}>
-                            Delete
-                        </button>
-                    </td>
-                </tr>
-            ))}
-            <tr>
-                <td>
-                    <input
-                        value={nyttKjøretøy.kjennemerke}
-                        onChange={(e) => setNyttKjøretøy({...nyttKjøretøy, kjennemerke: e.target.value})}
-                        placeholder="Kjennemerke"
-                    />
-                </td>
-                <td>
-                    <select
-                        value={nyttKjøretøy.kjoeretoeytype}
-                        onChange={(e) => setNyttKjøretøy({...nyttKjøretøy, kjoeretoeytype: e.target.value})}
-                    >
-                        {Object.values(Kjoeretoeytype).map((type) => (
-                            <option key={type} value={type}>{type}</option>
-                        ))}
-                    </select>
-                </td>
-                <td>
-                    <select
-                        value={nyttKjøretøy.drivstoff}
-                        onChange={(e) => setNyttKjøretøy({...nyttKjøretøy, drivstoff: e.target.value})}
-                    >
-                        {Object.values(Drivstoff).map((fuel) => (
-                            <option key={fuel} value={fuel}>{fuel}</option>
-                        ))}
-                    </select>
-                </td>
-                <td>
-                    <input
-                        value={nyttKjøretøy.egenvekt}
-                        onChange={(e) => setNyttKjøretøy({...nyttKjøretøy, egenvekt: e.target.value})}
-                        placeholder="Egenvekt"
-                    />
-                </td>
-                <td>
-                    <input
-                        value={nyttKjøretøy.totalvekt}
-                        onChange={(e) => setNyttKjøretøy({...nyttKjøretøy, totalvekt: e.target.value})}
-                        placeholder="Totalvekt"
-                    />
-                </td>
-                <td>
-                    <input
-                        type="date"
-                        value={nyttKjøretøy.foerstegangsregistreringsdato}
-                        onChange={(e) => setNyttKjøretøy({...nyttKjøretøy, foerstegangsregistreringsdato: e.target.value})}
-                    />
-                </td>
+                        </TableCellLayout>
+                    </TableCell><TableCell>
+                    <TableCellLayout>
+                        <button onClick={handleOppretteKjoeretoey}>Legge til kjøretøy</button>
 
-                <td>
-                    <button onClick={handleOppretteKjoeretoey}>Add Vehicle</button>
-                </td>
-            </tr>
-            </tbody>
-        </table>
+                    </TableCellLayout>
+                </TableCell>
+
+
+                </TableRow>
+            </TableBody>
+        </Table>
     );
+
 };
