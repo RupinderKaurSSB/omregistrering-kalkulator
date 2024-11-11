@@ -1,8 +1,17 @@
 import React, { useEffect, useState } from 'react';
-import {fdatasync} from "node:fs";
 import {Drivstoff} from "./enums/Drivstoff";
 import {Kjoeretoeytype} from "./enums/Kjoeretoeytype";
-
+import {
+    TableBody,
+    TableCell,
+    TableRow,
+    Table,
+    TableHeader,
+    TableHeaderCell,
+    TableCellLayout,
+    PresenceBadgeStatus,
+    Avatar,
+} from "@fluentui/react-components";
 
 interface Kjoeretoey {
     kjennemerke: string;
@@ -32,7 +41,7 @@ export const KjoeretoeyTable = () => {
         }
     };
 
-    const handleDelete = async (kjennemerke: string) => {
+    const sletteKjoeretoey = async (kjennemerke: string) => {
         try {
             await fetch(`/api/kjoeretoey/${kjennemerke}/fjern`, {
                 method: 'DELETE',
@@ -43,7 +52,7 @@ export const KjoeretoeyTable = () => {
         }
     };
 
-    const håndtereRedigering = async (kjoeretoey: Kjoeretoey) => {
+    const redigereKjoeretoey = async (kjoeretoey: Kjoeretoey) => {
         if (redigeringsId === kjoeretoey.kjennemerke) {
             try {
                 await fetch(`/api/kjoeretoey/${kjoeretoey.kjennemerke}/oppdater`, {
@@ -76,7 +85,7 @@ export const KjoeretoeyTable = () => {
     });
 
     // Add handleCreate function
-    const handleCreate = async () => {
+    const handleOppretteKjoeretoey = async () => {
         try {
             await fetch(`/api/kjoeretoey/${nyttKjøretøy.kjennemerke}/opprett`, {
                 method: 'POST',
@@ -195,10 +204,10 @@ export const KjoeretoeyTable = () => {
                         )}
                     </td>
                     <td>
-                        <button onClick={() => håndtereRedigering(kjoeretoey)}>
+                        <button onClick={() => redigereKjoeretoey(kjoeretoey)}>
                             {redigeringsId === kjoeretoey.kjennemerke ? 'Save' : 'Edit'}
                         </button>
-                        <button onClick={() => handleDelete(kjoeretoey.kjennemerke)}>
+                        <button onClick={() => sletteKjoeretoey(kjoeretoey.kjennemerke)}>
                             Delete
                         </button>
                     </td>
@@ -255,7 +264,7 @@ export const KjoeretoeyTable = () => {
                 </td>
 
                 <td>
-                    <button onClick={handleCreate}>Add Vehicle</button>
+                    <button onClick={handleOppretteKjoeretoey}>Add Vehicle</button>
                 </td>
             </tr>
             </tbody>
