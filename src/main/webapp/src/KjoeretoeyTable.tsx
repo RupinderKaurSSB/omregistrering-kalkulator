@@ -3,6 +3,7 @@ import {fdatasync} from "node:fs";
 import {Drivstoff} from "./enums/Drivstoff";
 import {Kjoeretoeytype} from "./enums/Kjoeretoeytype";
 
+
 interface Kjoeretoey {
     kjennemerke: string;
     kjoeretoeytype: string;

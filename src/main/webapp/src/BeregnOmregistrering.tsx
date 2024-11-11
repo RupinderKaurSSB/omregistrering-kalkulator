@@ -50,7 +50,6 @@ export const BeregnOmregistrering = () => {
                     onChange={(e) => setKjennemerke(e.target.value.toUpperCase())}
                     placeholder="Skriv inn kjennemerke"
                 />
-                <button onClick={beregning}>Beregn avgift</button>
             </div>
             <h2>Eller</h2>
             <div>

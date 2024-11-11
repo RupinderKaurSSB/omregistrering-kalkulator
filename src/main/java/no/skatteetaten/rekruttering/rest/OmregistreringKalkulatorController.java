@@ -32,9 +32,9 @@ public class OmregistreringKalkulatorController {
         Kjoeretoey kjoeretoey = KjoeretoeyRegister.hentKjoeretoey(kjennemerke);
         KjoeretoeyRegister kjoeretoeyRegister = new KjoeretoeyRegister();
 
-        OmregistreringKalkulator omregistreringKalkulator = new OmregistreringKalkulator(kjoeretoeyRegister, kjoeretoey);
+        OmregistreringKalkulator omregistreringKalkulator = new OmregistreringKalkulator();
 
-        double avgift = omregistreringKalkulator.beregnOmregistreringsAvgift(kjennemerke);
+        double avgift = omregistreringKalkulator.beregnOmregistreringsavgift(kjoeretoey);
 
         Map<String, Object> response = new HashMap<>();
         response.put("kjennemerke", kjennemerke);

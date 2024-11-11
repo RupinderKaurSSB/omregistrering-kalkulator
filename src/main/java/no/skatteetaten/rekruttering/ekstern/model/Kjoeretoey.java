@@ -1,8 +1,5 @@
 package no.skatteetaten.rekruttering.ekstern.model;
 
-import org.springframework.context.annotation.Bean;
-import org.springframework.stereotype.Component;
-
 import java.time.LocalDate;
 
 public class Kjoeretoey {

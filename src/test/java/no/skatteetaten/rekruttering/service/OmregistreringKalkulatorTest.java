@@ -13,14 +13,14 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class OmregistreringKalkulatorTest {
 
-    private OmregistreringKalkulator kalkulator;
+    private OmregistreringKalkulator kalkulator = new OmregistreringKalkulator();
     private KjoeretoeyRegister kjoeretoeyRegister;
 
     private Kjoeretoey kjoeretoey;
 
     @BeforeEach
     void setUp() {
-        kalkulator = new OmregistreringKalkulator(kjoeretoeyRegister, kjoeretoey);
+
     }
 
     @Test
@@ -207,6 +207,6 @@ class OmregistreringKalkulatorTest {
 
     @Test
     void kjoeretoey_PR12345_shouldHaveCorrectFee() {
-        assertEquals(6681, kalkulator.beregnOmregistreringsAvgift("PR12345"));
+        assertEquals(6681, kalkulator.beregnOmregistreringsavgift(KjoeretoeyRegister.hentKjoeretoey("PR12345")));
     }
 }
