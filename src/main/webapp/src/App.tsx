@@ -1,6 +1,8 @@
 import React from 'react';
 import logo from './skatteetaten-logo.svg';
 import './App.css';
+import {KjoeretoeyTable} from "./KjoeretoeyTable";
+import {BeregnOmregistrering} from "./BeregnOmregistrering";
 
 function App() {
   return (
@@ -13,7 +15,8 @@ function App() {
         </div>
       </header>
       <main>
-        {/* TODO */}
+          <KjoeretoeyTable />
+          <BeregnOmregistrering />
       </main>
       <footer>Skatteetaten 2023</footer>
     </div>

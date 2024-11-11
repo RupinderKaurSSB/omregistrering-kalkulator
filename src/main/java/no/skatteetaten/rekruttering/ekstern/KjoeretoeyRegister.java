@@ -9,7 +9,9 @@ import java.util.Map;
 import no.skatteetaten.rekruttering.ekstern.model.Drivstoff;
 import no.skatteetaten.rekruttering.ekstern.model.Kjoeretoey;
 import no.skatteetaten.rekruttering.ekstern.model.Kjoeretoeytype;
+import org.springframework.stereotype.Component;
 
+@Component
 public class KjoeretoeyRegister {
 
     /**
@@ -44,6 +46,25 @@ public class KjoeretoeyRegister {
                     Drivstoff.BENSIN,
                     LocalDate.of(1990, 1, 1)
                 ));
+            put("VR98723",
+                    new Kjoeretoey(
+                            "VR98723",
+                            2000,
+                            3000,
+                            Kjoeretoeytype.VAREBIL,
+                            Drivstoff.BENSIN,
+                            LocalDate.of(2015, 4, 20)
+                    ));
+            put("VR98013",
+                    new Kjoeretoey(
+                            "VR98013",
+                            2500,
+                            3500,
+                            Kjoeretoeytype.VAREBIL,
+                            Drivstoff.BENSIN,
+                            LocalDate.of(1990, 1, 1)
+                    ));
+
         }
     };
 

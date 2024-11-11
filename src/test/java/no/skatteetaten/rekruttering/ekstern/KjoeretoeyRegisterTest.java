@@ -1,9 +1,5 @@
 package no.skatteetaten.rekruttering.ekstern;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertNull;
-
 import java.time.LocalDate;
 
 import org.junit.jupiter.api.Test;
@@ -11,6 +7,8 @@ import org.junit.jupiter.api.Test;
 import no.skatteetaten.rekruttering.ekstern.model.Drivstoff;
 import no.skatteetaten.rekruttering.ekstern.model.Kjoeretoey;
 import no.skatteetaten.rekruttering.ekstern.model.Kjoeretoeytype;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 public class KjoeretoeyRegisterTest {
     @Test
@@ -25,6 +23,24 @@ public class KjoeretoeyRegisterTest {
         assertEquals(kjoeretoey.getFoerstegangsregistreringsdato(), LocalDate.of(2020, 3, 12));
     }
 
+    @Test
+    void hentAlleKjoeretoey_shouldReturnAllVehicles() {
+        var kjoeretoeyList = KjoeretoeyRegister.hentAlleKjoeretoey();
+
+        assertNotNull(kjoeretoeyList);
+        assertEquals(6, kjoeretoeyList.size());
+
+        assertTrue(kjoeretoeyList.stream()
+                .anyMatch(k -> k.getKjennemerke().equals("PR12345")));
+        assertTrue(kjoeretoeyList.stream()
+                .anyMatch(k -> k.getKjennemerke().equals("PD12345")));
+        assertTrue(kjoeretoeyList.stream()
+                .anyMatch(k -> k.getKjennemerke().equals("PN98765")));
+        assertTrue(kjoeretoeyList.stream()
+                .anyMatch(k -> k.getKjennemerke().equals("VR98723")));
+        assertTrue(kjoeretoeyList.stream()
+                .anyMatch(k -> k.getKjennemerke().equals("VR98013")));
+    }
     @Test
     void skalOppretteKjoeretoey() {
         String kjennemerke = "AA12345";
