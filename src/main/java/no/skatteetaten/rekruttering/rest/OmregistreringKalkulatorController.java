@@ -1,3 +1,7 @@
+/**
+ * Controller for handling requests related to vehicle registration fee calculation.
+ * Provides an endpoint to calculate the registration fee for a given vehicle registration number.
+ */
 package no.skatteetaten.rekruttering.rest;
 
 import no.skatteetaten.rekruttering.ekstern.KjoeretoeyRegister;
@@ -26,6 +30,12 @@ public class OmregistreringKalkulatorController {
         return "pong";
     }
 
+    /**
+     * Beregner registreringsavgiften for et kjøretøy med oppgitt registreringsnummer og returnerer resultatet som et JSON-svar
+     *
+     * @param kjennemerke kjøretøyets registreringsnummer
+     * @return en map som inneholder registreringsnummer og beregnet registreringsavgift
+     */
     @GetMapping("/{kjennemerke}/beregnAvgift")
     public ResponseEntity<Map<String, Object>> beregnOmregistreringsAvgift(@PathVariable String kjennemerke) {
 

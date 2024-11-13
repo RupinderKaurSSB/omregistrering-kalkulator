@@ -255,18 +255,6 @@ export const KjoeretoeyTable = () => {
                     </TableCell>
                     <TableCell>
                         <TableCellLayout>
-                            <select
-                                value={nyttKjoeretoey.drivstoff}
-                                onChange={(e) => setNyttKjoeretoey({...nyttKjoeretoey, drivstoff: e.target.value})}
-                            >
-                                {Object.values(Drivstoff).map((fuel) => (
-                                    <option key={fuel} value={fuel}>{fuel}</option>
-                                ))}
-                            </select>
-                        </TableCellLayout>
-                    </TableCell>
-                    <TableCell>
-                        <TableCellLayout>
                             <input
                                 value={nyttKjoeretoey.egenvekt}
                                 onChange={(e) => setNyttKjoeretoey({...nyttKjoeretoey, egenvekt: e.target.value})}
@@ -281,6 +269,18 @@ export const KjoeretoeyTable = () => {
                                 onChange={(e) => setNyttKjoeretoey({...nyttKjoeretoey, totalvekt: e.target.value})}
                                 placeholder="Totalvekt"
                             />
+                        </TableCellLayout>
+                    </TableCell>
+                    <TableCell>
+                        <TableCellLayout>
+                            <select
+                                value={nyttKjoeretoey.drivstoff}
+                                onChange={(e) => setNyttKjoeretoey({...nyttKjoeretoey, drivstoff: e.target.value})}
+                            >
+                                {Object.values(Drivstoff).map((fuel) => (
+                                    <option key={fuel} value={fuel}>{fuel}</option>
+                                ))}
+                            </select>
                         </TableCellLayout>
                     </TableCell>
                     <TableCell>

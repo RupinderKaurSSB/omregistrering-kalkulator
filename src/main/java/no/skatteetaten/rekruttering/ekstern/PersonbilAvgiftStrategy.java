@@ -13,6 +13,14 @@ public class PersonbilAvgiftStrategy implements AvgiftStrategy {
     private static final int OVER_1200_OG_2010_ELDRE_AVGIFT = 1729;
 
     @Override
+    /**
+     * Beregner avgiften for et gitt kjøretøy basert på vekt og alder
+     *
+     * @param kjoeretoey kjøretøy objektet som inneholder informasjon om kjøretøyet
+     * @param isNew om kjøretøyet er nytt (2019 eller nyere)
+     * @param isMedium om kjøretøyet er mellom 2011 og 2018
+     * @return det beregnede kjøretøy avgiftsbeløpet
+     */
     public int beregnAvgift(Kjoeretoey kjoeretoey, boolean isNew, boolean isMedium) {
         if (kjoeretoey.getEgenvekt() <= VEKTGRENSE) {
             if (isNew) return UNDER_1200_2019_OG_NY_AVGIFT;
